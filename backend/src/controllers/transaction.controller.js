@@ -14,49 +14,49 @@ export const getTransactionsByUserId = async (req, res) => {
 
 export const createTransaction = async (req, res) => {
   try {
-      const { title, user_id, amount, category } = req.body;
-  
-      if (!title || !user_id || amount === undefined || !category) {
-        return res.status(400).json({ error: "All fields are required." });
-      }
-  
-      const transaction = await sql`
+    const { title, user_id, amount, category } = req.body;
+
+    if (!title || !user_id || amount === undefined || !category) {
+      return res.status(400).json({ error: "All fields are required." });
+    }
+
+    const transaction = await sql`
         INSERT INTO transactions (title, user_id, amount, category)
         VALUES (${title}, ${user_id}, ${amount}, ${category})
         RETURNING *;
       `;
-  
-      res.status(201).json({
-        message: "Transaction created successfully.",
-        transaction: transaction[0],
-      });
-    } catch (error) {
-      console.log("Error creating transaction:", error);
-      res.status(500).json({ error: "Internal server error." });
-    }
-}
+
+    res.status(201).json({
+      message: "Transaction created successfully.",
+      transaction: transaction[0],
+    });
+  } catch (error) {
+    console.log("Error creating transaction:", error);
+    res.status(500).json({ error: "Internal server error." });
+  }
+};
 
 export const deleteTransaction = async (req, res) => {
   try {
-      const { id } = req.params;
-      if (isNaN(parseInt(id))) {
-        return res.status(400).json({ error: "Invalid transaction ID." });
-      }
-  
-      const result = await sql`
+    const { id } = req.params;
+    if (isNaN(parseInt(id))) {
+      return res.status(400).json({ error: "Invalid transaction ID." });
+    }
+
+    const result = await sql`
       DELETE FROM transactions WHERE id = ${id} RETURNING *;
       `;
-  
-      if (result.length === 0) {
-        return res.status(404).json({ error: "Transaction not found." });
-      }
-  
-      res.status(200).json({ message: "Transaction deleted successfully." });
-    } catch (error) {
-      console.log("Error deleting transaction:", error);
-      res.status(500).json({ error: "Internal server error." });
+
+    if (result.length === 0) {
+      return res.status(404).json({ error: "Transaction not found." });
     }
-}
+
+    res.status(200).json({ message: "Transaction deleted successfully." });
+  } catch (error) {
+    console.log("Error deleting transaction:", error);
+    res.status(500).json({ error: "Internal server error." });
+  }
+};
 
 export const getTransactionSummary = async (req, res) => {
   try {
@@ -89,4 +89,4 @@ export const getTransactionSummary = async (req, res) => {
     console.log("Error fetching transactions:", error);
     res.status(500).json({ error: "Internal server error." });
   }
-}
+};

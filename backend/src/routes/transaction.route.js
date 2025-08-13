@@ -1,5 +1,10 @@
-import express from 'express';  
-import { createTransaction, deleteTransaction, getTransactionsByUserId, getTransactionSummary } from '../controllers/transaction.controller.js';
+import express from "express";
+import {
+  createTransaction,
+  deleteTransaction,
+  getTransactionsByUserId,
+  getTransactionSummary,
+} from "../controllers/transaction.controller.js";
 
 const router = express.Router();
 
